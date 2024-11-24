@@ -8,7 +8,7 @@ describe('POST /auth/register', () => {
             const userData = {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
-                email: 'tanjim@gmaail.com',
+                email: 'tanjim@gmail.com',
                 password: 'secret',
             }
             // Act
@@ -24,7 +24,7 @@ describe('POST /auth/register', () => {
             const userData = {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
-                email: 'tanjim@gmaail.com',
+                email: 'tanjim@gmail.com',
                 password: 'secret',
             }
             // Act
@@ -35,6 +35,19 @@ describe('POST /auth/register', () => {
             expect(
                 (response.headers as Record<string, string>)['content-type'],
             ).toEqual(expect.stringContaining('json'))
+        })
+        it('should persist the user in the database', async () => {
+            // Arrange
+            const userData = {
+                firstName: 'Tanjim',
+                lastName: 'Emmett',
+                email: 'tanjim@gmail.com',
+                password: 'secret',
+            }
+            // Act
+            await request(app).post('/auth/register').send(userData)
+
+            // Assert
         })
     })
     describe('Fields are missing', () => {})
