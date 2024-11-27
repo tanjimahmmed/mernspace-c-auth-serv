@@ -29,7 +29,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             const response = await request(app)
@@ -45,7 +45,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             const response = await request(app)
@@ -63,7 +63,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             await request(app).post('/auth/register').send(userData)
@@ -83,7 +83,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             const response = await request(app)
@@ -105,7 +105,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             await request(app).post('/auth/register').send(userData)
@@ -123,7 +123,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             await request(app).post('/auth/register').send(userData)
@@ -142,7 +142,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
             const userRepository = connection.getRepository(User)
             await userRepository.save({ ...userData, role: Roles.CUSTOMER })
@@ -163,7 +163,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: '',
-                password: 'secret',
+                password: 'secret123',
             }
 
             // Act
@@ -184,7 +184,7 @@ describe('POST /auth/register', () => {
                 firstName: '',
                 lastName: 'Emmett',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
 
             // Act
@@ -204,7 +204,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: '',
                 email: 'tanjim@gmail.com',
-                password: 'secret',
+                password: 'secret123',
             }
 
             // Act
@@ -247,7 +247,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: ' tanjim@gmail.com ',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             await request(app).post('/auth/register').send(userData)
@@ -263,7 +263,7 @@ describe('POST /auth/register', () => {
                 firstName: 'Tanjim',
                 lastName: 'Emmett',
                 email: 'tanjim.com',
-                password: 'secret',
+                password: 'secret123',
             }
             // Act
             const response = await request(app)
@@ -275,7 +275,41 @@ describe('POST /auth/register', () => {
             const users = await userRepository.find()
             expect(users).toHaveLength(0)
         })
-        // it('should return 400 status code if password length is less than 8 characters')
-        // it('should return an array of error messages if email is missing')
+        it('should return 400 status code if password length is less than 8 characters', async () => {
+            // Arrange
+            const userData = {
+                firstName: 'Tanjim',
+                lastName: 'Emmett',
+                email: ' tanjim@gmail.com ',
+                password: 'secr',
+            }
+            // Act
+            const response = await request(app)
+                .post('/auth/register')
+                .send(userData)
+            // Assert
+            expect(response.statusCode).toBe(400)
+            const userRepository = connection.getRepository(User)
+            const users = await userRepository.find()
+            expect(users).toHaveLength(0)
+        })
+        it('should return an array of error messages if email is missing', async () => {
+            // Arrange
+            const userData = {
+                firstName: 'Tanjim',
+                lastName: 'Emmett',
+                email: '',
+                password: 'secr',
+            }
+            // Act
+            const response = await request(app)
+                .post('/auth/register')
+                .send(userData)
+            // Assert
+            expect(response.body).toHaveProperty('errors')
+            expect(
+                (response.body as Record<string, string>).errors.length,
+            ).toBeGreaterThan(0)
+        })
     })
 })
