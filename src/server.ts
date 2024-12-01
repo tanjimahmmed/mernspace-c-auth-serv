@@ -10,7 +10,6 @@ const startServer = () => {
             logger.info('Server Listening on port', { port: PORT })
         })
     } catch (error) {
-        console.error(error)
         process.exit(1)
     }
 }
