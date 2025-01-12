@@ -31,4 +31,10 @@ router.patch(
     },
 )
 
+router.get(
+    '/',
+    (req, res, next) =>
+        tenantController.getAll(req, res, next) as unknown as RequestHandler,
+)
+
 export default router
