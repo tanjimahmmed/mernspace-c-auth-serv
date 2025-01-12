@@ -22,4 +22,13 @@ router.post(
         tenantController.create(req, res, next) as unknown as RequestHandler,
 )
 
+router.patch(
+    '/:id',
+    authenticate as RequestHandler,
+    canAccess([Roles.ADMIN]),
+    (req, res, next) => {
+        tenantController.update(req, res, next) as unknown as RequestHandler
+    },
+)
+
 export default router
