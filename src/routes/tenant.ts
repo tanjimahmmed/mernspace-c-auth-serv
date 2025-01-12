@@ -37,4 +37,10 @@ router.get(
         tenantController.getAll(req, res, next) as unknown as RequestHandler,
 )
 
+router.get(
+    '/:id',
+    (req, res, next) =>
+        tenantController.getOne(req, res, next) as unknown as RequestHandler,
+)
+
 export default router
