@@ -1,15 +1,21 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserService } from '../services/UserService'
+import { CreateUserRequest, UpdateUserRequest } from '../types'
 import { Roles } from '../constants'
 import { Logger } from 'winston'
 import createHttpError from 'http-errors'
+import { validationResult } from 'express-validator'
 
 export class UserController {
     constructor(
         private userService: UserService,
         private logger: Logger,
     ) {}
-    async create(req: Request, res: Response, next: NextFunction) {
+    async create(req: CreateUserRequest, res: Response, next: NextFunction) {
+        const result = validationResult(req)
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() })
+        }
         const { firstName, lastName, email, password } = req.body
         try {
             const user = await this.userService.create({
@@ -25,7 +31,11 @@ export class UserController {
         }
     }
 
-    async update(req: Request, res: Response, next: NextFunction) {
+    async update(req: UpdateUserRequest, res: Response, next: NextFunction) {
+        const result = validationResult(req)
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() })
+        }
         const { firstName, lastName, role } = req.body
 
         const userId = req.params.id

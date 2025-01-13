@@ -1,5 +1,5 @@
 import express, { NextFunction, RequestHandler, Response } from 'express'
-import { CreateUserRequest } from '../types'
+import { CreateUserRequest, UpdateUserRequest } from '../types'
 import authenticate from '../middlewares/authenticate'
 import { canAccess } from '../middlewares/canAccess'
 import { Roles } from '../constants'
@@ -8,6 +8,8 @@ import { UserService } from '../services/UserService'
 import { AppDataSource } from '../config/data-source'
 import { User } from '../entity/User'
 import logger from '../config/logger'
+import createUserValidator from '../validators/create-user-validator'
+import updateUserValidator from '../validators/update-user-validator'
 
 const router = express.Router()
 
@@ -19,6 +21,7 @@ router.post(
     '/',
     authenticate as RequestHandler,
     canAccess([Roles.ADMIN]),
+    createUserValidator,
     (req: CreateUserRequest, res: Response, next: NextFunction) =>
         userController.create(req, res, next) as unknown as RequestHandler,
 )
@@ -27,7 +30,8 @@ router.patch(
     '/:id',
     authenticate as RequestHandler,
     canAccess([Roles.ADMIN]),
-    (req, res, next) =>
+    updateUserValidator,
+    (req: UpdateUserRequest, res: Response, next: NextFunction) =>
         userController.update(req, res, next) as unknown as RequestHandler,
 )
 
