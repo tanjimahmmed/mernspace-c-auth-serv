@@ -41,6 +41,8 @@ router.get(
 
 router.get(
     '/:id',
+    authenticate as RequestHandler,
+    canAccess([Roles.ADMIN]),
     (req, res, next) =>
         tenantController.getOne(req, res, next) as unknown as RequestHandler,
 )
