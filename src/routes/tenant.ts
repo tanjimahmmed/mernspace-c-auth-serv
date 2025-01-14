@@ -29,9 +29,8 @@ router.patch(
     authenticate as RequestHandler,
     canAccess([Roles.ADMIN]),
     tenantValidator,
-    (req: CreateTenantRequest, res: Response, next: NextFunction) => {
-        tenantController.update(req, res, next) as unknown as RequestHandler
-    },
+    (req: CreateTenantRequest, res: Response, next: NextFunction) =>
+        tenantController.update(req, res, next) as unknown as RequestHandler,
 )
 
 router.get(
