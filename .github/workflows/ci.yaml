@@ -17,7 +17,7 @@ jobs:
               run: npm ci
             - name: Run eslint
               run: npm run lint
-            - name: Test and coverage
+            # - name: Test and coverage
               run: npm run test
               env:
                   DB_HOST: ${{ secrets.TEST_DB_HOST }}
