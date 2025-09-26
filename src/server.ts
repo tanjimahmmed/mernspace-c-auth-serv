@@ -1,4 +1,6 @@
 function welcome(name: string) {
+    console.log('hello');
+
     const user = {
         name: 'Tanjim',
     };
