@@ -11,9 +11,13 @@ export default tseslint.config(
             'dist',
             'node_modules',
             'eslint.config.mjs',
+            'scripts/generateKeys.mjs',
+            'scripts/convertPemToJwk.mjs',
             'jest.config.js',
             '**/*.spec.ts',
             'tests/',
+            'coverage/',
+            '.github',
         ],
     },
     {
