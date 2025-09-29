@@ -3,6 +3,7 @@ import { UserData } from '../../types';
 import { Repository } from 'typeorm';
 import createHttpError from 'http-errors';
 import logger from '../config/logger';
+import { Roles } from '../constants';
 
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
@@ -13,6 +14,7 @@ export class UserService {
                 lastName,
                 email,
                 password,
+                role: Roles.CUSTOMER,
             });
         } catch (err) {
             logger.error('Database save failed', err);
