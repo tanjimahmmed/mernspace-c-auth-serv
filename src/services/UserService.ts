@@ -44,4 +44,12 @@ export class UserService {
             },
         });
     }
+
+    async finById(id: number) {
+        return await this.userRepository.findOne({
+            where: {
+                id,
+            },
+        });
+    }
 }
