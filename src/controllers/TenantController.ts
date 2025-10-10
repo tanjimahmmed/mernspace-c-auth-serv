@@ -56,4 +56,27 @@ export class TenantController {
             next(err);
         }
     }
+
+    async getOne(req: Request, res: Response, next: NextFunction) {
+        const tenantId = req.params.id;
+
+        if (isNaN(Number(tenantId))) {
+            next(createHttpError(400, 'Invalid url param'));
+            return;
+        }
+
+        try {
+            const tenants = await this.tenantService.getById(Number(tenantId));
+
+            if (!tenants) {
+                next(createHttpError(400, 'Tenant id does not exists'));
+                return;
+            }
+
+            this.logger.info('Single tenant');
+            res.json(tenants);
+        } catch (err) {
+            next(err);
+        }
+    }
 }
