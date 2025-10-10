@@ -66,15 +66,15 @@ export class TenantController {
         }
 
         try {
-            const tenants = await this.tenantService.getById(Number(tenantId));
+            const tenant = await this.tenantService.getById(Number(tenantId));
 
-            if (!tenants) {
-                next(createHttpError(400, 'Tenant id does not exists'));
+            if (!tenant) {
+                next(createHttpError(400, 'Tenant does not exist'));
                 return;
             }
 
-            this.logger.info('Single tenant');
-            res.json(tenants);
+            this.logger.info('Tenant has been fetched');
+            res.json(tenant);
         } catch (err) {
             next(err);
         }
@@ -91,7 +91,9 @@ export class TenantController {
         try {
             await this.tenantService.deleteById(Number(tenantId));
 
-            this.logger.info('Tenant deleted');
+            this.logger.info('Tenant has been deleted', {
+                id: Number(tenantId),
+            });
             res.json({ id: Number(tenantId) });
         } catch (err) {
             next(err);
