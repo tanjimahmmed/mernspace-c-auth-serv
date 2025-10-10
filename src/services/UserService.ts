@@ -4,11 +4,10 @@ import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import logger from '../config/logger';
-import { Roles } from '../constants';
 
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
-    async create({ firstName, lastName, email, password }: UserData) {
+    async create({ firstName, lastName, email, password, role }: UserData) {
         const user = await this.userRepository.findOne({
             where: { email: email },
         });
@@ -25,7 +24,7 @@ export class UserService {
                 lastName,
                 email,
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                role,
             });
         } catch (err) {
             logger.error('Database save failed', err);
