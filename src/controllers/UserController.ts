@@ -68,6 +68,7 @@ export class UserController {
 
         if (isNaN(Number(userId))) {
             next(createHttpError(400, 'Invalid url param'));
+            return;
         }
 
         try {
@@ -78,6 +79,26 @@ export class UserController {
             }
             this.logger.info('User has been fetched', { id: user.id });
             res.json(user);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async destroy(req: Request, res: Response, next: NextFunction) {
+        const userId = req.params.id;
+
+        if (isNaN(Number(userId))) {
+            next(createHttpError(400, 'Invalid url param'));
+            return;
+        }
+
+        try {
+            await this.userService.deleteById(Number(userId));
+
+            this.logger.info('User has been deleted', {
+                id: Number(userId),
+            });
+            res.json({ id: Number(userId) });
         } catch (err) {
             next(err);
         }
