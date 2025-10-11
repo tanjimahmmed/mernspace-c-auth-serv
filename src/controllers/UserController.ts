@@ -1,9 +1,9 @@
 import { NextFunction, Response, Request } from 'express';
 import { UserService } from '../services/UserService';
-import { CreateUserRequest } from '../../types';
-import { Roles } from '../constants';
+import { CreateUserRequest, UpdateUserRequest } from '../../types';
 import createHttpError from 'http-errors';
 import { Logger } from 'winston';
+import { validationResult } from 'express-validator';
 
 export class UserController {
     constructor(
@@ -12,7 +12,15 @@ export class UserController {
     ) {}
 
     async create(req: CreateUserRequest, res: Response, next: NextFunction) {
-        const { firstName, lastName, email, password } = req.body;
+        // Validation
+        const result = validationResult(req);
+
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
+
+        const { firstName, lastName, email, password, tenantId, role } =
+            req.body;
 
         try {
             const user = await this.userService.create({
@@ -20,7 +28,8 @@ export class UserController {
                 lastName,
                 email,
                 password,
-                role: Roles.MANAGER,
+                role,
+                tenantId,
             });
             res.status(201).json({ id: user.id });
         } catch (err) {
@@ -28,7 +37,12 @@ export class UserController {
         }
     }
 
-    async update(req: CreateUserRequest, res: Response, next: NextFunction) {
+    async update(req: UpdateUserRequest, res: Response, next: NextFunction) {
+        // validation
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
         const { firstName, lastName, role } = req.body;
         const userId = req.params.id;
 
