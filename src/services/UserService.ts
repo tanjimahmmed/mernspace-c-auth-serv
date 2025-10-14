@@ -1,7 +1,7 @@
 import { User } from '../entity/User';
 import { LimitedUserData, UserData } from '../../types';
 import { Repository } from 'typeorm';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import createHttpError from 'http-errors';
 import logger from '../config/logger';
 
